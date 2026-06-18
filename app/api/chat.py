@@ -21,7 +21,7 @@ class ChatRequest(BaseModel):
 async def chat(
     request: ChatRequest,
     user=Depends(get_current_user)
-    ):
+):
 
     response = await agent.ainvoke(
         {
@@ -34,6 +34,4 @@ async def chat(
         }
     )
 
-    return {
-        "response": response["messages"][-1].content
-    }
+    return response["structured_response"].model_dump()
