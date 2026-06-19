@@ -1,3 +1,4 @@
+# app/agents/movie_agent.py
 from dotenv import load_dotenv
 from langchain.agents import create_agent
 
@@ -27,7 +28,7 @@ class ChatResponse(BaseModel):
 MODEL = "openai:gpt-5.4-mini"
 
 SYSTEM_PROMPT = (
-    """Você é o assistente virtual do CinePulse, um app de descoberta de filmes e séries.
+       """Você é o assistente virtual do CinePulse, um app de descoberta de filmes e séries.
 
 # SEU ESCOPO (e somente isso)
 Você ajuda o usuário com:
@@ -77,20 +78,25 @@ Nunca diga "não fui treinado para isso" — diga que isso está fora do que voc
 """
 )
 
-agent = create_agent(
-    model=MODEL,
-    tools=[
-        search_movie,
-        search_tv_show,
-        discover_content,
-        get_movie_details,
-        get_tv_details,
-        get_cast,
-        get_person_details,
-        get_similar_movies,
-        get_recommendations,
-        get_trending,
-    ],
-    system_prompt=SYSTEM_PROMPT,
-    response_format=ChatResponse
-)
+TOOLS = [
+    search_movie,
+    search_tv_show,
+    discover_content,
+    get_movie_details,
+    get_tv_details,
+    get_cast,
+    get_person_details,
+    get_similar_movies,
+    get_recommendations,
+    get_trending,
+]
+
+
+def build_agent(checkpointer):
+    return create_agent(
+        model=MODEL,
+        tools=TOOLS,
+        system_prompt=SYSTEM_PROMPT,
+        response_format=ChatResponse,
+        checkpointer=checkpointer,
+    )
