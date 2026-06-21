@@ -13,10 +13,7 @@ from app.agents.movie_agent import build_agent
 async def lifespan(app: FastAPI):
     initialize_firebase()
 
-    if not settings.DATABASE_URL:
-        raise RuntimeError("DATABASE_URL não foi configurada no ambiente")
-
-    async with AsyncPostgresSaver.from_conn_string(settings.DATABASE_URL) as checkpointer:
+    async with AsyncPostgresSaver.from_conn_string(settings.database_conn_string) as checkpointer:
         await checkpointer.setup()
         app.state.agent = build_agent(checkpointer)
         yield
