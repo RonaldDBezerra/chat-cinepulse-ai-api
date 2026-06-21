@@ -1,4 +1,3 @@
-# app/agents/movie_agent.py
 from dotenv import load_dotenv
 from langchain.agents import create_agent
 
